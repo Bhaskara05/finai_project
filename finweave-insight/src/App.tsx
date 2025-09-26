@@ -14,7 +14,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CategoryDetail from "./pages/CategoryDetail";
 import NotFound from "./pages/NotFound";
-
+import Expense from "./pages/Expense";
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -32,6 +32,7 @@ const App = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/insights" element={<Insights />} />
                   <Route path="/investments" element={<Investments />} />
+                  <Route path="/expense" element={<Expense />} />  
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />

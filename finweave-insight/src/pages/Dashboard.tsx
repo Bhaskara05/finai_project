@@ -33,6 +33,9 @@ import {
   BarChart,
   Bar
 } from 'recharts';
+import income from '@/images/income.png';
+import expense from '@/images/expense.png';
+import savings from '@/images/saving.png';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -71,31 +74,31 @@ export default function Dashboard() {
   const totalSavings = totalIncome - totalExpenses;
 
   const summaryCards = [
-    {
-      title: t('totalIncome'),
-      amount: totalIncome,
-      change: '+5.2%',
-      changeType: 'positive' as const,
-      icon: TrendingUp,
-      gradient: 'gradient-income'
-    },
-    {
-      title: t('totalExpenses'),
-      amount: totalExpenses,
-      change: '+2.1%',
-      changeType: 'negative' as const,
-      icon: TrendingDown,
-      gradient: 'gradient-expense'
-    },
-    {
-      title: t('totalSavings'),
-      amount: totalSavings,
-      change: '+12.8%',
-      changeType: 'positive' as const,
-      icon: PiggyBank,
-      gradient: 'gradient-savings'
-    }
-  ];
+  {
+    title: t('totalIncome'),
+    amount: totalIncome,
+    change: '+5.2%',
+    changeType: 'positive' as const,
+    gradient: 'linear-gradient(135deg, #34d399, #059669)',
+    image: income,
+  },
+  {
+    title: t('totalExpenses'),
+    amount: totalExpenses,
+    change: '+2.1%',
+    changeType: 'negative' as const,
+    gradient: 'linear-gradient(135deg, #f87171, #b91c1c)',
+    image: expense,
+  },
+  {
+    title: t('totalSavings'),
+    amount: totalSavings,
+    change: '+12.8%',
+    changeType: 'positive' as const,
+    gradient: 'linear-gradient(135deg, #60a5fa, #2563eb)',
+    image: savings,
+  },
+];
 
   return (
     <div className="min-h-screen bg-animated">
@@ -114,121 +117,134 @@ export default function Dashboard() {
           </p>
         </motion.div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {summaryCards.map((card, index) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="card-3d p-6"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 rounded-lg bg-${card.gradient} flex items-center justify-center`}>
-                  <card.icon className="h-6 w-6 text-white" />
-                </div>
-                <span className={`text-sm font-medium px-2 py-1 rounded-full ${
-                  card.changeType === 'positive' 
-                    ? 'bg-success/10 text-success' 
-                    : 'bg-destructive/10 text-destructive'
-                }`}>
-                  {card.change}
-                </span>
-              </div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                {card.title}
-              </h3>
-              <p className="text-2xl font-bold text-foreground">
-                ₹{card.amount.toLocaleString()}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+      {/* Summary Cards */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  {summaryCards.map((card, index) => (
+    <motion.div
+      key={card.title}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg"
+      style={{
+        backgroundColor: '#f5f5f5', // light grey background
+      }}
+    >
+      {/* Image at full intensity */}
+      {card.image && (
+        <img
+          src={card.image}
+          alt={card.title}
+          className="absolute top-1/2 left-1/2 w-4/5 h-4/5 object-contain -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        />
+      )}
 
+      {/* Optional subtle overlay to improve text readability */}
+      <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
+
+      {/* Card Content */}
+      <div className="relative flex items-center justify-between mb-4">
+        <span className={`text-sm font-medium px-2 py-1 rounded-full ${
+          card.changeType === 'positive' 
+            ? 'bg-success/10 text-success' 
+            : 'bg-destructive/10 text-destructive'
+        }`}>
+          {card.change}
+        </span>
+      </div>
+      <h3 className="relative text-sm font-medium text-foreground mb-1">
+        {card.title}
+      </h3>
+      <p className="relative text-2xl font-bold text-foreground">
+        ₹{card.amount.toLocaleString()}
+      </p>
+    </motion.div>
+  ))}
+</div>
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Monthly Overview */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="chart-container"
-          >
-            <h3 className="text-lg font-semibold mb-4">{t('monthlyOverview')}</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
-                <Tooltip 
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
-                  }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="income" 
-                  stroke="hsl(var(--chart-1))" 
-                  strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--chart-1))', strokeWidth: 2, r: 4 }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="expenses" 
-                  stroke="hsl(var(--chart-4))" 
-                  strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--chart-4))', strokeWidth: 2, r: 4 }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="savings" 
-                  stroke="hsl(var(--chart-3))" 
-                  strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--chart-3))', strokeWidth: 2, r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </motion.div>
+          {/* Monthly Overview as Bar Chart */}
+<motion.div
+  initial={{ opacity: 0, x: -20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ delay: 0.2 }}
+  className="chart-container"
+>
+  <h3 className="text-lg font-semibold mb-4">{t('monthlyOverview')}</h3>
+  <ResponsiveContainer width="100%" height={300}>
+  <BarChart data={monthlyData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+    <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+    <YAxis stroke="hsl(var(--muted-foreground))" />
+
+    {/* Tooltip shows only one bar */}
+    <Tooltip 
+      shared={false} // important: only show the hovered bar
+      contentStyle={{
+        backgroundColor: 'hsl(var(--card))',
+        border: '1px solid hsl(var(--border))',
+        borderRadius: '8px'
+      }}
+      formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
+    />
+
+    {/* Income Bar */}
+    <Bar dataKey="income" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
+
+    {/* Expenses Bar */}
+    <Bar dataKey="expenses" fill="hsl(var(--chart-4))" radius={[4, 4, 0, 0]} />
+
+    {/* Savings Bar */}
+    <Bar dataKey="savings" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} />
+  </BarChart>
+</ResponsiveContainer>
+
+</motion.div>
 
           {/* Expense Breakdown */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="chart-container"
-          >
-            <h3 className="text-lg font-semibold mb-4">Expense Breakdown</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={expenseBreakdown}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {expenseBreakdown.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']}
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </motion.div>
-        </div>
+<motion.div
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ delay: 0.3 }}
+  className="chart-container flex flex-col lg:flex-row items-center gap-6"
+>
+  <div className="w-full lg:w-2/3">
+    <h3 className="text-lg font-semibold mb-4">Expense Breakdown</h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={expenseBreakdown}
+          cx="50%"
+          cy="50%"
+          innerRadius={60}
+          outerRadius={120}
+          paddingAngle={5}
+          dataKey="value"
+        >
+          {expenseBreakdown.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color} />
+          ))}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
+  </div>
 
+  {/* Side Legend */}
+  <div className="w-full lg:w-1/3 flex flex-col space-y-2">
+    {expenseBreakdown.map((entry, index) => (
+      <div key={index} className="flex items-center gap-3">
+        <span
+          className="w-4 h-4 rounded-full"
+          style={{ backgroundColor: entry.color }}
+        ></span>
+        <span className="text-sm font-medium text-foreground">
+          {entry.name} - ₹{entry.value.toLocaleString()}
+        </span>
+      </div>
+    ))}
+  </div>
+</motion.div>
+        </div>
         {/* 3D Model Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -242,28 +258,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Expense Categories 3D Cards */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-8"
-        >
-          <h3 className="text-2xl font-semibold mb-6 font-poppins">{t('expenseCategories')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {expenseCategories.map((category, index) => (
-              <ExpenseCard3D
-                key={category.category}
-                title={category.title}
-                amount={category.amount}
-                icon={category.icon}
-                color={category.color}
-                category={category.category}
-                index={index}
-              />
-            ))}
-          </div>
-        </motion.div>
+        
       </div>
     </div>
   );
