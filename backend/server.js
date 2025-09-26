@@ -5,6 +5,7 @@ import cors from "cors";
 
 import registerRoute from "./routes/register.js";
 import loginRoute from "./routes/login.js";
+import profileRoutes from "./routes/profile.js"; // make sure to add .js
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use("/api/auth/register", registerRoute);
 app.use("/api/auth/login", loginRoute);
+app.use("/api/profile", profileRoutes); // ✅ fixed
 
 // Health check route
 app.get("/", (req, res) => {
