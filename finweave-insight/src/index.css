@@ -1,0 +1,298 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Financial Platform Design System - Modern, Professional, ET Money Inspired */
+
+
+@layer base {
+  :root {
+    /* Primary Financial Colors */
+    --background: 323 42% 12%;
+    --foreground: 215 28% 17%;
+    
+    --card: 22 255 255;
+    --card-foreground: 12 28% 17%;
+    
+    --popover: 255 255 255;
+    --popover-foreground: 215 28% 17%;
+    
+    /* Finance Brand Colors */
+    --primary: 217 91% 60%;  /* Professional Blue */
+    --primary-foreground: 255 255 255;
+    --primary-light: 217 91% 70%;
+    --primary-dark: 217 91% 45%;
+    
+    --secondary: 142 76% 36%;  /* Financial Green */
+    --secondary-foreground: 255 255 255;
+    --secondary-light: 142 76% 46%;
+    
+    --success: 142 76% 36%;
+    --success-foreground: 255 255 255;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 255 255 255;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 255 255 255;
+    
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    
+    --accent: 210 40% 96%;
+    --accent-foreground: 215 28% 17%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+    
+    /* Financial Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 45%));
+    --gradient-secondary: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(142 76% 36%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(255 255 255) 0%, hsl(248 250 252) 100%);
+    --gradient-income: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-expense: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 45%));
+    --gradient-savings: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 92% 35%));
+    
+    /* Chart Colors */
+    --chart-1: 142 76% 36%;
+    --chart-2: 217 91% 60%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 0 84% 60%;
+    --chart-5: 271 91% 65%;
+    
+    /* Shadows */
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-3d: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    
+    --card: 224 71% 4%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 217 91% 60%;
+    --primary-foreground: 255 255 255;
+    --primary-light: 217 91% 70%;
+    --primary-dark: 217 91% 45%;
+    
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 255 255 255;
+    --secondary-light: 142 76% 46%;
+    
+    --success: 142 76% 36%;
+    --success-foreground: 255 255 255;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 255 255 255;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 255 255 255;
+    
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 217 91% 60%;
+    
+    /* Dark Mode Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 45%));
+    --gradient-secondary: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(142 76% 36%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(224 71% 4%) 0%, hsl(222 47% 11%) 100%);
+    --gradient-income: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-expense: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 45%));
+    --gradient-savings: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 92% 35%));
+    
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-3d: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: "opsz" 32;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Card Components */
+  .card-3d {
+    @apply bg-card border border-border/50 rounded-xl shadow-[var(--shadow-card)] transition-all duration-300;
+    background: var(--gradient-card);
+    transform-style: preserve-3d;
+  }
+  
+  .card-3d:hover {
+    @apply shadow-[var(--shadow-card-hover)];
+    transform: translateY(-4px) rotateX(5deg) rotateY(5deg);
+  }
+  
+  .card-expense {
+    @apply relative overflow-hidden;
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .card-expense::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+  }
+  
+  /* Button Variants */
+  .btn-gradient {
+    background: var(--gradient-primary);
+    @apply text-white border-0 shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-105;
+  }
+  
+  .btn-hero {
+    background: var(--gradient-hero);
+    @apply text-white border-0 shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-105 px-8 py-4 text-lg font-semibold;
+  }
+  
+  .btn-success {
+    background: var(--gradient-income);
+    @apply text-white border-0 shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-105;
+  }
+  
+  .btn-warning {
+    background: var(--gradient-savings);
+    @apply text-white border-0 shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-105;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    @apply bg-card rounded-xl p-6 shadow-[var(--shadow-card)] border border-border/50;
+    background: var(--gradient-card);
+  }
+  
+  /* Background Animations */
+  .bg-animated {
+    background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--muted)), hsl(var(--accent)), hsl(var(--background)));
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Floating Animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Pulse Animation */
+  .pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { 
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Loading Animation */
+  .loading-dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+  
+  .loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    animation: loading-dots 1.4s infinite both;
+  }
+  
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes loading-dots {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+  
+  /* Typing Animation */
+  .typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+    margin-left: 2px;
+  }
+  
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+}
