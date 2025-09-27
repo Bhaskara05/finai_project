@@ -1,149 +1,109 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, LogIn, TrendingUp } from 'lucide-react';
+import { Eye, EyeOff, LogIn, TrendingUp, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { loginUser } from '@/api';
 
 export default function Login() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    password: ''
-  });
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<{ name: string, email: string } | null>(null);
+
+  useEffect(() => {
+    // check if user is already logged in
+    const session = localStorage.getItem('user-session');
+    if (session) {
+      setUser(JSON.parse(session));
+    }
+  }, []);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()))
+      newErrors.email = 'Enter a valid email';
+    if (!formData.password.trim()) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6)
       newErrors.password = 'Password must be at least 6 characters';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
-
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Simple demo validation - in real app, this would be handled by backend
-      const savedUser = localStorage.getItem('user-data');
-      if (savedUser) {
-        const userData = JSON.parse(savedUser);
-        if (userData.name === formData.name && userData.password === formData.password) {
-          localStorage.setItem('user-session', JSON.stringify({ 
-            name: formData.name, 
-            loginTime: new Date().toISOString() 
-          }));
-          toast({
-            title: "Login Successful",
-            description: `Welcome back, ${formData.name}!`,
-          });
-          navigate('/');
-        } else {
-          toast({
-            title: "Login Failed",
-            description: "Invalid credentials. Please try again.",
-            variant: "destructive",
-          });
-        }
+    try {
+      const res = await loginUser({ email: formData.email, password: formData.password });
+      if (res.token) {
+        const sessionData = { token: res.token, name: res.user.name, email: res.user.email };
+        localStorage.setItem("user-session", JSON.stringify(sessionData));
+        setUser(sessionData);
+        toast({ title: "Login Successful", description: `Welcome back, ${res.user.name}!` });
       } else {
-        toast({
-          title: "Account Not Found",
-          description: "Please register first or check your credentials.",
-          variant: "destructive",
-        });
+        toast({ title: "Login Failed", description: res.message, variant: "destructive" });
       }
-      setIsLoading(false);
-    }, 1500);
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Server error", variant: "destructive" });
+    } finally { setIsLoading(false); }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user-session');
+    setUser(null);
+    toast({ title: "Logged Out", description: "You have been logged out successfully" });
   };
 
   return (
-    <div className="min-h-screen bg-animated flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary">
-              <TrendingUp className="h-6 w-6 text-white" />
-            </div>
-            <span className="font-bold text-2xl font-poppins bg-gradient-primary bg-clip-text text-transparent">
-              FinanceTracker
-            </span>
-          </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Welcome Back
-          </h1>
-          <p className="text-muted-foreground">
-            Sign in to your account to continue managing your finances
-          </p>
-        </motion.div>
-
-        {/* Login Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="card-3d border-0">
-            <CardHeader>
-              <CardTitle className="text-center text-primary">
-                <LogIn className="h-6 w-6 inline mr-2" />
-                {t('login')}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-tr from-blue-50 via-white to-green-50">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
+        {user ? (
+          <Card className="shadow-xl rounded-2xl overflow-hidden text-center p-6">
+            <h2 className="text-2xl font-bold mb-4">Hello, {user.name}</h2>
+            <p className="mb-6">You are already logged in.</p>
+            <Button variant="destructive" className="flex items-center justify-center mx-auto" onClick={handleLogout}>
+              <LogOut className="h-4 w-4 mr-2" /> Logout
+            </Button>
+          </Card>
+        ) : (
+          <Card className="shadow-xl rounded-2xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-green-400 text-white text-center py-6">
+              <CardTitle className="flex items-center justify-center gap-2 text-2xl font-bold">
+                <TrendingUp className="h-6 w-6" /> FinanceTracker
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <Label htmlFor="name">{t('name')} *</Label>
+                  <Label htmlFor="email">Email *</Label>
                   <Input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    className={errors.name ? 'border-destructive' : ''}
-                    placeholder="Enter your full name"
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className={errors.email ? 'border-destructive' : ''}
+                    placeholder="you@example.com"
                   />
-                  {errors.name && (
-                    <p className="text-destructive text-sm mt-1">{errors.name}</p>
-                  )}
+                  {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                 </div>
 
                 <div>
-                  <Label htmlFor="password">{t('password')} *</Label>
+                  <Label htmlFor="password">Password *</Label>
                   <div className="relative">
                     <Input
                       id="password"
@@ -153,72 +113,33 @@ export default function Login() {
                       className={errors.password ? 'border-destructive pr-10' : 'pr-10'}
                       placeholder="Enter your password"
                     />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                    <Button type="button" variant="ghost" size="sm"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-0 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
-                      )}
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </Button>
                   </div>
-                  {errors.password && (
-                    <p className="text-destructive text-sm mt-1">{errors.password}</p>
-                  )}
+                  {errors.password && <p className="text-destructive text-sm mt-1">{errors.password}</p>}
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full btn-gradient"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <div className="loading-dots">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                  ) : (
-                    <>
-                      <LogIn className="h-4 w-4 mr-2" />
-                      {t('login')}
-                    </>
-                  )}
+                <Button type="submit" className="w-full btn-gradient" disabled={isLoading}>
+                  {isLoading ? 'Logging in...' : <><LogIn className="h-4 w-4 mr-2" /> Login</>}
                 </Button>
               </form>
 
               <div className="text-center mt-6">
                 <p className="text-muted-foreground text-sm">
                   Don't have an account?{' '}
-                  <Link 
-                    to="/register" 
-                    className="text-primary hover:underline font-medium"
-                  >
-                    {t('register')}
+                  <Link to="/register" className="text-primary hover:underline font-medium">
+                    Register
                   </Link>
                 </p>
               </div>
             </CardContent>
           </Card>
-        </motion.div>
-
-        {/* Demo Info */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 p-4 rounded-lg bg-muted/50 text-center"
-        >
-          <p className="text-sm text-muted-foreground">
-            <strong>Demo:</strong> Use any credentials you registered with, or register first if you're new.
-          </p>
-        </motion.div>
-      </div>
+        )}
+      </motion.div>
     </div>
   );
 }

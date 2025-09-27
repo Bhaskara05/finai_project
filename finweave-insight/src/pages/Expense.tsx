@@ -7,7 +7,7 @@ import billImage from '@/images/bill.png';
 import shoppingImage from '@/images/shopping.png';
 import travelImage from '@/images/travel.png';
 import foodImage from '@/images/food.png';
-import homeImage from '@/images/home.png';
+import homeImage from '@/images/income.png';
 import familyImage from '@/images/family spent.png';
 import habitsImage from '@/images/habit.png';
 import vehicleImage from '@/images/vehicle.png';
