@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Moon, Sun, Globe, Menu, X, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
@@ -21,13 +20,14 @@ export function Navbar() {
     { path: '/', label: t('dashboard') },
     { path: '/insights', label: t('insights') },
     { path: '/investments', label: t('investments') },
+    { path: '/expense', label: t('Expenses') }, // Expense page added here
     { path: '/profile', label: t('profile') },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
@@ -62,7 +62,7 @@ export function Navbar() {
                     layoutId="activeTab"
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary"
                     initial={false}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                   />
                 )}
               </Link>
@@ -142,22 +142,19 @@ export function Navbar() {
                     {item.label}
                   </Link>
                 ))}
-                
+
+                {/* Mobile Language & Theme Controls */}
                 <div className="flex items-center justify-between px-4 py-2">
                   <Button variant="ghost" size="sm" onClick={toggleLanguage}>
                     <Globe className="h-4 w-4 mr-2" />
                     {i18n.language.toUpperCase()}
                   </Button>
-                  
                   <Button variant="ghost" size="sm" onClick={toggleTheme}>
-                    {theme === 'dark' ? (
-                      <Sun className="h-4 w-4" />
-                    ) : (
-                      <Moon className="h-4 w-4" />
-                    )}
+                    {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                   </Button>
                 </div>
-                
+
+                {/* Mobile Auth Buttons */}
                 <div className="flex flex-col space-y-2 px-4">
                   <Button variant="ghost" size="sm" asChild>
                     <Link to="/login" onClick={() => setIsMenuOpen(false)}>

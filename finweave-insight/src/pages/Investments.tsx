@@ -23,7 +23,11 @@ export default function Investments() {
   useEffect(() => {
     const savedMessages = localStorage.getItem('chat-history');
     if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
+      const parsed: Message[] = JSON.parse(savedMessages).map(msg => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp) // convert string back to Date
+      }));
+      setMessages(parsed);
     } else {
       // Add welcome message
       const welcomeMessage: Message = {
@@ -111,11 +115,7 @@ export default function Investments() {
     <div className="min-h-screen bg-animated">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-4xl font-bold font-poppins mb-2 bg-gradient-primary bg-clip-text text-transparent">
             {t('investments')}
           </h1>
@@ -153,12 +153,7 @@ export default function Investments() {
         </div>
 
         {/* Chat Interface */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="card-3d p-0 h-[600px] flex flex-col"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-3d p-0 h-[600px] flex flex-col">
           {/* Chat Header */}
           <div className="p-4 border-b border-border/40">
             <div className="flex items-center space-x-3">
@@ -183,31 +178,14 @@ export default function Investments() {
                   exit={{ opacity: 0, y: -20 }}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`flex items-start space-x-3 max-w-[80%] ${
-                    message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                  }`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      message.sender === 'user' 
-                        ? 'bg-primary text-white' 
-                        : 'bg-gradient-primary text-white'
-                    }`}>
-                      {message.sender === 'user' ? (
-                        <User className="h-4 w-4" />
-                      ) : (
-                        <Bot className="h-4 w-4" />
-                      )}
+                  <div className={`flex items-start space-x-3 max-w-[80%] ${message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-gradient-primary text-white'}`}>
+                      {message.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                     </div>
-                    <div className={`p-3 rounded-2xl ${
-                      message.sender === 'user'
-                        ? 'bg-primary text-white'
-                        : 'bg-muted text-foreground'
-                    }`}>
+                    <div className={`p-3 rounded-2xl ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-muted text-foreground'}`}>
                       <p className="text-sm">{message.text}</p>
-                      <p className={`text-xs mt-1 opacity-70`}>
-                        {message.timestamp.toLocaleTimeString([], { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        })}
+                      <p className="text-xs mt-1 opacity-70">
+                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>
@@ -217,11 +195,7 @@ export default function Investments() {
 
             {/* Typing Indicator */}
             {isTyping && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex justify-start"
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
                     <Bot className="h-4 w-4 text-white" />
