@@ -81,7 +81,7 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg"
-              style={{ backgroundColor: '#f5f5f5' }}
+              style={{ backgroundColor: '#ffffff' }}
             >
               {card.image && (
                 <img
@@ -110,110 +110,118 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           
           {/* Monthly Overview - Bar Chart */}
-<motion.div
-  initial={{ opacity: 0, x: -20 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ delay: 0.2 }}
-  className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center"
->
-  <h3 className="text-lg font-semibold mb-4">{t('monthlyOverview')}</h3>
-  <div className="w-4/5">
-    <ResponsiveContainer width="100%" height={250}>
-      <BarChart data={monthlyData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
-        <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-        <YAxis stroke="hsl(var(--muted-foreground))" />
-        <Tooltip
-          shared={false}
-          contentStyle={{
-            backgroundColor: 'hsl(var(--card))',
-            border: '1px solid hsl(var(--border))',
-            borderRadius: '8px',
-          }}
-          formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
-        />
-        <Bar dataKey="income" name="Income" fill="#60A5FA" radius={[6, 6, 0, 0]} />
-        <Bar dataKey="expenses" name="Expenses" fill="#F87171" radius={[6, 6, 0, 0]} />
-        <Bar dataKey="savings" name="Savings" fill="#34D399" radius={[6, 6, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
-  </div>
-</motion.div>
-
-{/* Expense Breakdown - Pie + List */}
-<motion.div
-  initial={{ opacity: 0, x: 20 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ delay: 0.3 }}
-  className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center"
->
-  <h3 className="text-lg font-semibold mb-6">Expense Breakdown</h3>
-  <div className="flex flex-col lg:flex-row gap-8 items-center">
-    
-    {/* Donut Chart */}
-    <div className="w-4/5 max-w-[260px] relative">
-      <ResponsiveContainer width="100%" height={250}>
-        <PieChart>
-          <Pie
-            data={expenseCategories}
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={100}
-            paddingAngle={2}
-            dataKey="amount"
-            nameKey="title"
-            labelLine={false}
-            isAnimationActive={true}
-            animationDuration={700}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg flex flex-col items-center"
+            style={{ backgroundColor: '#ffffff' }}
           >
-            {expenseCategories.map((entry, index) => (
-              <Cell key={index} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip
-            formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
-            contentStyle={{
-              backgroundColor: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
-              borderRadius: '8px',
-            }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <p className="text-xs text-muted-foreground">Total</p>
-        <p className="text-lg font-bold text-foreground">₹{totalExpenses.toLocaleString()}</p>
-      </div>
-    </div>
+            <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
+            <h3 className="relative text-lg font-semibold mb-4">{t('monthlyOverview')}</h3>
+            <div className="relative w-4/5">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={monthlyData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip
+                    shared={false}
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px',
+                    }}
+                    formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
+                  />
+                  <Bar dataKey="income" name="Income" fill="#60A5FA" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="expenses" name="Expenses" fill="#F87171" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="savings" name="Savings" fill="#34D399" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
 
-    {/* Expense List */}
-    <div className="flex-1 flex flex-col gap-3 w-full">
-      {expenseCategories.map((entry, index) => {
-        const percentage = ((entry.amount / totalExpenses) * 100).toFixed(1);
-        const Icon = entry.icon;
-        return (
-          <div
-            key={index}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-sm transition-all"
+          {/* Expense Breakdown - Pie + List */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg flex flex-col items-center"
+            style={{ backgroundColor: '#ffffff' }}
           >
-            <div className="flex items-center gap-3">
-              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
-              <Icon className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground">{entry.title}</span>
+            <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
+            <h3 className="relative text-lg font-semibold mb-6">Expense Breakdown</h3>
+            <div className="relative flex flex-col lg:flex-row gap-6 items-start w-full">
+              
+              {/* Donut Chart */}
+              <div className="w-full lg:w-2/5 flex justify-center">
+                <div className="relative">
+                  <ResponsiveContainer width={240} height={240}>
+                    <PieChart>
+                      <Pie
+                        data={expenseCategories}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={90}
+                        paddingAngle={2}
+                        dataKey="amount"
+                        nameKey="title"
+                        labelLine={false}
+                        isAnimationActive={true}
+                        animationDuration={700}
+                      >
+                        {expenseCategories.map((entry, index) => (
+                          <Cell key={index} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
+                        contentStyle={{
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px',
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <p className="text-xs text-muted-foreground">Total</p>
+                    <p className="text-sm font-bold text-foreground">₹{totalExpenses.toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expense List - 2 Column Grid */}
+              <div className="flex-1 w-full lg:w-3/5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-full">
+                  {expenseCategories.map((entry, index) => {
+                    const percentage = ((entry.amount / totalExpenses) * 100).toFixed(1);
+                    const Icon = entry.icon;
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-sm transition-all min-w-0"
+                      >
+                        <div className="flex items-center gap-1 min-w-0 flex-1">
+                          <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }} />
+                          <Icon className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs font-medium text-foreground truncate">{entry.title}</span>
+                        </div>
+                        <div className="text-right ml-1 flex-shrink-0">
+                          <p className="text-xs font-semibold text-foreground">
+                            ₹{(entry.amount / 1000).toFixed(0)}k
+                          </p>
+                          <p className="text-xs text-muted-foreground">{percentage}%</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold text-foreground">
-                ₹{entry.amount.toLocaleString()}
-              </p>
-              <p className="text-xs text-muted-foreground">{percentage}%</p>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-</motion.div>
+          </motion.div>
         </div>
 
         {/* 3D Model Section */}
