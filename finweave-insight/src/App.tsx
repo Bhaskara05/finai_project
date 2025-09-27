@@ -9,6 +9,7 @@ import { Footer } from "@/components/layout/Footer";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
 import Investments from "./pages/Investments";
+import Expense from './pages/Expense';
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/insights" element={<Insights />} />
                   <Route path="/investments" element={<Investments />} />
+                   <Route path="/expense" element={<Expense />} />  {/* <-- This is required */}
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />

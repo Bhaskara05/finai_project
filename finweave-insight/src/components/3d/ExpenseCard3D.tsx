@@ -10,6 +10,7 @@ interface ExpenseCard3DProps {
   color: string;
   category: string;
   index: number;
+  image?: string;
 }
 
 export function ExpenseCard3D({ 
@@ -18,7 +19,8 @@ export function ExpenseCard3D({
   icon: Icon, 
   color, 
   category, 
-  index 
+  index,
+  image 
 }: ExpenseCard3DProps) {
   const navigate = useNavigate();
 
@@ -52,6 +54,15 @@ export function ExpenseCard3D({
       }}
     >
       <div className="p-6 relative overflow-hidden">
+        {/* Background Image */}
+        {image && (
+          <img
+            src={image}
+            alt={title}
+            className="absolute top-1/2 left-1/2 w-4/5 h-4/5 object-contain -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-40 group-hover:opacity-60 transition-opacity duration-300 brightness-125"
+          />
+        )}
+
         {/* Background Gradient */}
         <div 
           className="absolute inset-0 opacity-10 rounded-xl"
@@ -60,8 +71,11 @@ export function ExpenseCard3D({
           }}
         />
         
+        {/* White overlay for better text readability */}
+        <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
+        
         {/* Icon */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 relative z-10">
           <div 
             className="w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200"
             style={{ backgroundColor: `${color}20` }}
@@ -79,12 +93,12 @@ export function ExpenseCard3D({
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-200">
+        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-200 relative z-10">
           {title}
         </h3>
 
         {/* Progress Bar */}
-        <div className="w-full bg-muted rounded-full h-2 mb-4">
+        <div className="w-full bg-muted rounded-full h-2 mb-4 relative z-10">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${Math.min((amount / 50000) * 100, 100)}%` }}
@@ -95,7 +109,7 @@ export function ExpenseCard3D({
         </div>
 
         {/* Additional Info */}
-        <div className="flex justify-between items-center text-sm text-muted-foreground">
+        <div className="flex justify-between items-center text-sm text-muted-foreground relative z-10">
           <span>This Month</span>
           <span className="font-medium">
             {((amount / 100000) * 100).toFixed(1)}% of budget
