@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Moon, Sun, Globe, Menu, X, TrendingUp } from 'lucide-react';
+import { Moon, Sun, Globe, Menu, X, TrendingUp, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,21 +10,29 @@ export function Navbar() {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'kn' : 'en');
   };
 
+  const session = localStorage.getItem('user-session');
+
   const navItems = [
-    { path: '/', label: t('dashboard') },
+    { path: '/dashboard', label: t('dashboard') },
     { path: '/insights', label: t('insights') },
     { path: '/investments', label: t('investments') },
-    { path: '/expense', label: t('Expenses') }, // Expense page added here
+    { path: '/expense', label: t('Expenses') },
     { path: '/profile', label: t('profile') },
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = () => {
+    localStorage.removeItem('user-session');
+    navigate('/');
+  };
 
   return (
     <motion.nav
@@ -35,7 +43,7 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to={session ? '/dashboard' : '/'} className="flex items-center space-x-2">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-primary">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
@@ -46,64 +54,60 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                  isActive(item.path)
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {item.label}
-                {isActive(item.path) && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary"
-                    initial={false}
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </Link>
-            ))}
+            {session &&
+              navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isActive(item.path)
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {item.label}
+                  {isActive(item.path) && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary"
+                      initial={false}
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+              ))}
           </div>
 
           {/* Controls */}
           <div className="flex items-center space-x-2">
             {/* Language Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="hidden sm:flex"
-            >
+            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="hidden sm:flex">
               <Globe className="h-4 w-4 mr-2" />
               {i18n.language.toUpperCase()}
             </Button>
 
             {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTheme}
-              className="hidden sm:flex"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
+            <Button variant="ghost" size="sm" onClick={toggleTheme} className="hidden sm:flex">
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
             {/* Auth Buttons */}
             <div className="hidden sm:flex items-center space-x-2">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">{t('login')}</Link>
-              </Button>
-              <Button size="sm" className="btn-gradient" asChild>
-                <Link to="/register">{t('register')}</Link>
-              </Button>
+              {session ? (
+                <Button variant="destructive" size="sm" onClick={handleLogout} className="flex items-center space-x-1">
+                  <LogOut className="h-4 w-4" />
+                  <span>{t('logout')}</span>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/login">{t('login')}</Link>
+                  </Button>
+                  <Button size="sm" className="btn-gradient" asChild>
+                    <Link to="/register">{t('register')}</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -128,20 +132,21 @@ export function Navbar() {
               className="md:hidden border-t border-border/40 py-4"
             >
               <div className="space-y-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      isActive(item.path)
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {session &&
+                  navItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        isActive(item.path)
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
 
                 {/* Mobile Language & Theme Controls */}
                 <div className="flex items-center justify-between px-4 py-2">
@@ -156,16 +161,25 @@ export function Navbar() {
 
                 {/* Mobile Auth Buttons */}
                 <div className="flex flex-col space-y-2 px-4">
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                      {t('login')}
-                    </Link>
-                  </Button>
-                  <Button size="sm" className="btn-gradient" asChild>
-                    <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                      {t('register')}
-                    </Link>
-                  </Button>
+                  {session ? (
+                    <Button variant="destructive" size="sm" onClick={handleLogout} className="flex items-center justify-center space-x-1">
+                      <LogOut className="h-4 w-4" />
+                      <span>{t('logout')}</span>
+                    </Button>
+                  ) : (
+                    <>
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                          {t('login')}
+                        </Link>
+                      </Button>
+                      <Button size="sm" className="btn-gradient" asChild>
+                        <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                          {t('register')}
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>

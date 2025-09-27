@@ -19,12 +19,13 @@ export default function Login() {
   const [user, setUser] = useState<{ name: string, email: string } | null>(null);
 
   useEffect(() => {
-    // check if user is already logged in
     const session = localStorage.getItem('user-session');
     if (session) {
       setUser(JSON.parse(session));
+      // navigate("/dashboard"); // <-- Redirect already logged-in users
     }
   }, []);
+
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -51,11 +52,13 @@ export default function Login() {
     try {
       const res = await loginUser({ email: formData.email, password: formData.password });
       if (res.token) {
-        const sessionData = { token: res.token, name: res.user.name, email: res.user.email };
-        localStorage.setItem("user-session", JSON.stringify(sessionData));
-        setUser(sessionData);
-        toast({ title: "Login Successful", description: `Welcome back, ${res.user.name}!` });
-      } else {
+      const sessionData = { token: res.token, name: res.user.name, email: res.user.email };
+      localStorage.setItem("user-session", JSON.stringify(sessionData));
+      setUser(sessionData);
+      toast({ title: "Login Successful", description: `Welcome back, ${res.user.name}!` });
+      navigate("/dashboard"); // <-- ADD THIS LINE
+      }
+      else {
         toast({ title: "Login Failed", description: res.message, variant: "destructive" });
       }
     } catch (err: any) {
@@ -64,10 +67,12 @@ export default function Login() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user-session');
-    setUser(null);
-    toast({ title: "Logged Out", description: "You have been logged out successfully" });
+  localStorage.removeItem('user-session');
+  setUser(null);
+  toast({ title: "Logged Out", description: "You have been logged out successfully" });
+  navigate("/"); // back to landing page
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-tr from-blue-50 via-white to-green-50">

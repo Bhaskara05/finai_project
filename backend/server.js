@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error("MongoDB Error:", err));
 
 // Routes
-app.use("/api/auth/register", registerRoute);
+app.use("/api/auth", registerRoute);
 app.use("/api/auth/login", loginRoute);
 app.use("/api/profile", profileRoutes); // ✅ fixed
 
