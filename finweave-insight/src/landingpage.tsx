@@ -27,8 +27,8 @@ const Landing: React.FC = () => {
   }, []);
 
   const videoSources = {
-    video1: "E:\\MIT\\finweave-insight\\videos\\0_Mobile_App_Financial_App_3840x2160.mp4",
-    video2: "E:\\MIT\\finweave-insight\\videos\\18743334-hd_1920_1080_60fps.mp4"
+    video1: "/videos/0_Mobile_App_Financial_App_3840x2160.mp4",
+    video2: "/videos/18743334-hd_1920_1080_60fps.mp4"
   };
 
   return (
@@ -40,7 +40,7 @@ const Landing: React.FC = () => {
             <span className="text-white text-lg font-bold">F</span>
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            FinPay
+            FinAi
           </span>
         </div>
         
@@ -51,15 +51,11 @@ const Landing: React.FC = () => {
           <a href="#features" className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium">
             Features
           </a>
-          <a href="#products" className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium">
-            Products
-          </a>
-          <a href="#resources" className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium">
-            Resources
-          </a>
-          <a href="#community" className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium">
-            Community
-          </a>
+          <Link to="/footer">
+            <button className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium px-4 py-2 rounded-lg hover:bg-purple-50">
+              Community
+            </button>
+          </Link>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -81,7 +77,7 @@ const Landing: React.FC = () => {
         {/* Left Content */}
         <div className="flex-1 max-w-2xl mb-12 lg:mb-0 lg:pr-12">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full mb-6">
-            <span className="text-purple-600 font-medium text-sm">🚀 The Future of Banking</span>
+            <span className="text-purple-600 font-medium text-sm">The Future of Banking</span>
           </div>
           
           <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -101,12 +97,14 @@ const Landing: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Link to="/register">
               <button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
-                Get Started Free
+                Get Started
               </button>
             </Link>
-            <button className="border-2 border-gray-300 hover:border-purple-600 text-gray-700 hover:text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-purple-50">
-              Watch Demo
-            </button>
+            <Link to="/register">
+              <button className="border-2 border-gray-300 hover:border-purple-600 text-gray-700 hover:text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-purple-50">
+                Watch Demo
+              </button>
+            </Link>
           </div>
 
           {/* Stats */}
@@ -296,10 +294,11 @@ const Landing: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-          {/* Video 1 */}
-          <div className="relative group">
-            <div className="w-full h-80 bg-gradient-to-br from-purple-100 to-blue-100 rounded-3xl overflow-hidden shadow-xl group-hover:shadow-2xl transition-all duration-500">
+        {/* First Video Section - Video from Left */}
+        <div className="flex flex-col lg:flex-row gap-16 items-center mb-24">
+          {/* Video 1 - Left Side */}
+          <div className="flex-1 relative group">
+            <div className="w-full aspect-[3/2] bg-gradient-to-br from-purple-100 to-blue-100 rounded-3xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-700 transform group-hover:scale-105">
               {videoState.video1Loaded ? (
                 <video 
                   className="w-full h-full object-cover"
@@ -307,7 +306,7 @@ const Landing: React.FC = () => {
                   muted
                   loop
                   controls
-                  poster="/api/placeholder/600/400"
+                  poster="/api/placeholder/800/500"
                 >
                   <source src={videoSources.video1} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -315,82 +314,56 @@ const Landing: React.FC = () => {
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <span className="text-2xl">📱</span>
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <span className="text-3xl">📱</span>
                     </div>
-                    <p className="text-gray-700 font-medium">Mobile Banking Experience</p>
-                    <p className="text-gray-500 text-sm mt-2">Loading video...</p>
+                    <p className="text-gray-700 font-medium text-xl">Mobile Banking Experience</p>
+                    <p className="text-gray-500 text-lg mt-2">Loading video...</p>
                   </div>
                 </div>
               )}
             </div>
+            {/* Decorative gradient overlay */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-3xl -z-10 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
           </div>
 
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-gray-900">
+          {/* Content - Right Side */}
+          <div className="flex-1 space-y-8 lg:pl-8">
+            <h3 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
               Seamless Mobile Banking
             </h3>
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed">
               Experience banking like never before with our intuitive mobile app. 
               Manage your finances, transfer money, and pay bills with just a few taps.
             </p>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
                 </div>
-                <span className="text-gray-700">Instant transfers</span>
+                <span className="text-gray-700 text-lg">Instant transfers</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
                 </div>
-                <span className="text-gray-700">Real-time notifications</span>
+                <span className="text-gray-700 text-lg">Real-time notifications</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
                 </div>
-                <span className="text-gray-700">Advanced security</span>
+                <span className="text-gray-700 text-lg">Advanced security</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 lg:order-2">
-            <h3 className="text-3xl font-bold text-gray-900">
-              Smart Financial Insights
-            </h3>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Get personalized insights about your spending habits and financial health. 
-              Make informed decisions with our AI-powered analytics.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-                <span className="text-gray-700">Spending analytics</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-                <span className="text-gray-700">Budget recommendations</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-                <span className="text-gray-700">Investment suggestions</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Video 2 */}
-          <div className="relative group lg:order-1">
-            <div className="w-full h-80 bg-gradient-to-br from-green-100 to-teal-100 rounded-3xl overflow-hidden shadow-xl group-hover:shadow-2xl transition-all duration-500">
+        {/* Second Video Section - Video from Right */}
+        <div className="flex flex-col lg:flex-row-reverse gap-16 items-center mb-16">
+          {/* Video 2 - Right Side */}
+          <div className="flex-1 relative group">
+            <div className="w-full aspect-[3/2] bg-gradient-to-br from-green-100 to-teal-100 rounded-3xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-700 transform group-hover:scale-105">
               {videoState.video2Loaded ? (
                 <video 
                   className="w-full h-full object-cover"
@@ -398,7 +371,7 @@ const Landing: React.FC = () => {
                   muted
                   loop
                   controls
-                  poster="/api/placeholder/600/400"
+                  poster="/api/placeholder/800/500"
                 >
                   <source src={videoSources.video2} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -406,14 +379,47 @@ const Landing: React.FC = () => {
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <span className="text-2xl">📊</span>
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <span className="text-3xl">📊</span>
                     </div>
-                    <p className="text-gray-700 font-medium">Financial Analytics</p>
-                    <p className="text-gray-500 text-sm mt-2">Loading video...</p>
+                    <p className="text-gray-700 font-medium text-xl">Financial Analytics</p>
+                    <p className="text-gray-500 text-lg mt-2">Loading video...</p>
                   </div>
                 </div>
               )}
+            </div>
+            {/* Decorative gradient overlay */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-green-600/20 to-teal-600/20 rounded-3xl -z-10 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+          </div>
+
+          {/* Content - Left Side */}
+          <div className="flex-1 space-y-8 lg:pr-8">
+            <h3 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              Smart Financial Insights
+            </h3>
+            <p className="text-xl text-gray-600 leading-relaxed">
+              Get personalized insights about your spending habits and financial health. 
+              Make informed decisions with our AI-powered analytics.
+            </p>
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
+                </div>
+                <span className="text-gray-700 text-lg">Spending analytics</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
+                </div>
+                <span className="text-gray-700 text-lg">Budget recommendations</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">✓</span>
+                </div>
+                <span className="text-gray-700 text-lg">Investment suggestions</span>
+              </div>
             </div>
           </div>
         </div>

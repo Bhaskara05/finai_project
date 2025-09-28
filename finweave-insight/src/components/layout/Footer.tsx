@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import bhaskaraImage from '../../images/bhaskara.jpg';
+import khushalImage from '../../images/khushal.jpg';
+import nithinImage from '../../images/nithin.jpg';
+import prasadImage from '../../images/prasad.jpg';
 
 export function Footer() {
   const { t } = useTranslation();
@@ -17,10 +21,10 @@ export function Footer() {
   ];
 
   const teamMembers = [
-    { name: 'Bhaskara', role: 'Full Stack Developer', linkedin: '#' },
-    { name: 'Khusahal L', role: 'Frontend Developer', linkedin: '#' },
-    { name: 'Nithin G', role: 'Backend Developer', linkedin: '#' },
-    { name: 'Prasad A M', role: 'UI/UX Designer', linkedin: '#' },
+    { name: 'Bhaskara', role: 'Full Stack Developer', linkedin: 'https://www.linkedin.com/in/bhaskara-88aa76322/', image: bhaskaraImage },
+    { name: 'Khusahal L', role: 'Frontend Developer', linkedin: 'https://www.linkedin.com/in/khushal-l/', image: khushalImage },
+    { name: 'Nithin G', role: 'Backend Developer', linkedin: 'https://www.linkedin.com/in/nithing17/', image: nithinImage },
+    { name: 'Prasad A M', role: 'UI/UX Designer', linkedin: 'https://www.linkedin.com/in/amprasad18/', image: prasadImage },
   ];
 
   const footerLinks = [
@@ -57,8 +61,12 @@ export function Footer() {
               className="text-center group"
             >
               <div className="relative mb-4 mx-auto">
-                <div className="w-24 h-24 bg-gradient-primary rounded-full flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  {member.name.split(' ').map(n => n[0]).join('')}
+                <div className="w-24 h-24 rounded-full overflow-hidden group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="absolute inset-0 rounded-full bg-gradient-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </div>

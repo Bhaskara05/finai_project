@@ -1,237 +1,154 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next'; // Removed for compatibility
 import { 
-  Utensils, Plane, Receipt, ShoppingBag, Home, Users, Coffee, Car, Heart, MoreHorizontal,
-  TrendingUp, TrendingDown, PiggyBank
+  Utensils, Plane, Receipt, ShoppingBag, Home, Users, Coffee, Car, Heart, MoreHorizontal
 } from 'lucide-react';
-import { FloatingModel } from '@/components/3d/FloatingModel';
 import {
   ResponsiveContainer,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
+  PieChart, Pie, Cell,
+  Tooltip
 } from 'recharts';
-import incomeImg from '@/images/income.png';
-import expensesImg from '@/images/expense.png';
-import savingsImg from '@/images/saving.png';
+
+// --- API Configuration ---
+const API_BASE_URL = 'http://127.0.0.1:8000';
+
+// --- Helper for mapping category names to icons and colors ---
+const categoryDetails = {
+  'Food & Drink': { icon: Utensils, color: '#ef4444' },
+  'Travel': { icon: Plane, color: '#3b82f6' },
+  'Bills & Utilities': { icon: Receipt, color: '#f59e0b' },
+  'Shopping': { icon: ShoppingBag, color: '#8b5cf6' },
+  'Home': { icon: Home, color: '#10b981' },
+  'Family': { icon: Users, color: '#f97316' },
+  'Entertainment': { icon: Coffee, color: '#84cc16' },
+  'Transportation': { icon: Car, color: '#06b6d4' },
+  'Health & Wellness': { icon: Heart, color: '#ec4899' },
+  'Other': { icon: MoreHorizontal, color: '#6b7280' },
+};
+
+// Placeholder for translation function
+const t = (key) => ({ 'dashboard': 'Dashboard' }[key] || key);
 
 export default function Dashboard() {
-  const { t } = useTranslation();
+  // --- State Management for Dynamic Data ---
+  const [summaryData, setSummaryData] = useState(null);
+  const [expenseData, setExpenseData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const expenseCategories = [
-    { title: t('food'), amount: 18000, icon: Utensils, color: '#ef4444' },
-    { title: t('travel'), amount: 35000, icon: Plane, color: '#3b82f6' },
-    { title: t('bills'), amount: 22000, icon: Receipt, color: '#f59e0b' },
-    { title: t('shopping'), amount: 28000, icon: ShoppingBag, color: '#8b5cf6' },
-    { title: t('homeSpent'), amount: 20000, icon: Home, color: '#10b981' },
-    { title: t('familiesSpent'), amount: 15000, icon: Users, color: '#f97316' },
-    { title: t('habits'), amount: 32000, icon: Coffee, color: '#84cc16' },
-    { title: t('vehicles'), amount: 8000, icon: Car, color: '#06b6d4' },
-    { title: t('donateForSociety'), amount: 12000, icon: Heart, color: '#ec4899' },
-    { title: t('other'), amount: 15000, icon: MoreHorizontal, color: '#6b7280' },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/dashboard/savings`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard data from the server.');
+        }
+        const data = await response.json();
 
-  const totalExpenses = expenseCategories.reduce((sum, cat) => sum + cat.amount, 0);
+        // Process and set state
+        setSummaryData(data.savings_bar);
+        const formattedExpenses = data.spending_chart.map(cat => ({
+          title: cat.category,
+          amount: cat.total_amount,
+          ...categoryDetails[cat.category] || categoryDetails['Other']
+        }));
+        setExpenseData(formattedExpenses);
 
-  const monthlyData = [
-    { month: 'Jan', income: 80000, expenses: 65000, savings: 15000 },
-    { month: 'Feb', income: 82000, expenses: 68000, savings: 14000 },
-    { month: 'Mar', income: 85000, expenses: 70000, savings: 15000 },
-    { month: 'Apr', income: 83000, expenses: 72000, savings: 11000 },
-    { month: 'May', income: 87000, expenses: 75000, savings: 12000 },
-    { month: 'Jun', income: 90000, expenses: 78000, savings: 12000 },
-  ];
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const totalIncome = 90000;
-  const totalSavings = totalIncome - totalExpenses;
+    fetchDashboardData();
+  }, []);
 
-  const summaryCards = [
-    { title: t('totalIncome'), amount: totalIncome, change: '+5.2%', changeType: 'positive' as const, icon: TrendingUp, image: incomeImg },
-    { title: t('totalExpenses'), amount: totalExpenses, change: '+2.1%', changeType: 'negative' as const, icon: TrendingDown, image: expensesImg },
-    { title: t('totalSavings'), amount: totalSavings, change: '+12.8%', changeType: 'positive' as const, icon: PiggyBank, image: savingsImg },
-  ];
+  if (loading) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white"><p>Loading Dashboard...</p></div>;
+  }
+  if (error) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center"><p className="text-red-500">Error: {error}</p></div>;
+  }
+
+  const totalExpenses = expenseData.reduce((sum, cat) => sum + cat.amount, 0);
 
   return (
-    <div className="min-h-screen bg-animated">
+    <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="text-4xl font-bold font-poppins mb-2 bg-gradient-primary bg-clip-text text-transparent">
-            {t('dashboard')}
-          </h1>
-          <p className="text-muted-foreground">
-            Welcome back! Here's your financial overview for this month.
-          </p>
+          <h1 className="text-4xl font-bold text-white">{t('dashboard')}</h1>
+          <p className="text-gray-400">Welcome back! Here's your financial overview.</p>
         </motion.div>
 
-        {/* Summary Cards */}
+        {/* Summary Cards (Dynamic) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {summaryCards.map((card, index) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg"
-              style={{ backgroundColor: '#ffffff' }}
-            >
-              {card.image && (
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="absolute top-1/2 left-1/2 w-4/5 h-4/5 object-contain -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                />
-              )}
-              <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
-              <div className="relative flex items-center justify-between mb-4">
-                <span
-                  className={`text-sm font-medium px-2 py-1 rounded-full ${
-                    card.changeType === 'positive' ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'
-                  }`}
-                >
-                  {card.change}
-                </span>
-              </div>
-              <h3 className="relative text-sm font-medium text-foreground mb-1">{card.title}</h3>
-              <p className="relative text-2xl font-bold text-foreground">₹{card.amount.toLocaleString()}</p>
-            </motion.div>
-          ))}
+            <SummaryCard title="Total Income" amount={summaryData.monthly_income} />
+            <SummaryCard title="Total Expenses" amount={summaryData.total_expenses} />
+            <SummaryCard title="Net Savings" amount={summaryData.net_savings} />
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          
-          {/* Monthly Overview - Bar Chart */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg flex flex-col items-center"
-            style={{ backgroundColor: '#ffffff' }}
-          >
-            <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
-            <h3 className="relative text-lg font-semibold mb-4">{t('monthlyOverview')}</h3>
-            <div className="relative w-4/5">
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={monthlyData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip
-                    shared={false}
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                    }}
-                    formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
-                  />
-                  <Bar dataKey="income" name="Income" fill="#60A5FA" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="expenses" name="Expenses" fill="#F87171" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="savings" name="Savings" fill="#34D399" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </motion.div>
-
-          {/* Expense Breakdown - Pie + List */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="card-3d p-6 relative overflow-hidden rounded-xl shadow-lg flex flex-col items-center"
-            style={{ backgroundColor: '#ffffff' }}
-          >
-            <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
-            <h3 className="relative text-lg font-semibold mb-6">Expense Breakdown</h3>
-            <div className="relative flex flex-col lg:flex-row gap-6 items-start w-full">
-              
-              {/* Donut Chart */}
-              <div className="w-full lg:w-2/5 flex justify-center">
-                <div className="relative">
-                  <ResponsiveContainer width={240} height={240}>
-                    <PieChart>
-                      <Pie
-                        data={expenseCategories}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={90}
-                        paddingAngle={2}
-                        dataKey="amount"
-                        nameKey="title"
-                        labelLine={false}
-                        isAnimationActive={true}
-                        animationDuration={700}
-                      >
-                        {expenseCategories.map((entry, index) => (
-                          <Cell key={index} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--card))',
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px',
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <p className="text-xs text-muted-foreground">Total</p>
-                    <p className="text-sm font-bold text-foreground">₹{totalExpenses.toLocaleString()}</p>
-                  </div>
-                </div>
+        {/* Expense Breakdown (Restored and Dynamic) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-gray-800 p-6 rounded-xl shadow-lg"
+        >
+          <h3 className="text-xl font-semibold mb-4">Expense Breakdown</h3>
+          {expenseData.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              {/* Pie Chart */}
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={expenseData} dataKey="amount" nameKey="title" cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={3}>
+                      {expenseData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #4B5563' }} formatter={(value) => `₹${value.toLocaleString()}`} />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-
-              {/* Expense List - 2 Column Grid */}
-              <div className="flex-1 w-full lg:w-3/5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-full">
-                  {expenseCategories.map((entry, index) => {
-                    const percentage = ((entry.amount / totalExpenses) * 100).toFixed(1);
-                    const Icon = entry.icon;
-                    return (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-sm transition-all min-w-0"
-                      >
-                        <div className="flex items-center gap-1 min-w-0 flex-1">
-                          <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }} />
-                          <Icon className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-                          <span className="text-xs font-medium text-foreground truncate">{entry.title}</span>
-                        </div>
-                        <div className="text-right ml-1 flex-shrink-0">
-                          <p className="text-xs font-semibold text-foreground">
-                            ₹{(entry.amount / 1000).toFixed(0)}k
-                          </p>
-                          <p className="text-xs text-muted-foreground">{percentage}%</p>
-                        </div>
+              {/* Expense List */}
+              <div className="grid grid-cols-2 gap-4">
+                {expenseData.map((entry) => {
+                  const Icon = entry.icon;
+                  return (
+                    <div key={entry.title} className="bg-gray-700 p-3 rounded-lg">
+                      <div className="flex items-center mb-1">
+                        <Icon className="w-4 h-4 mr-2" style={{ color: entry.color }} />
+                        <span className="text-sm text-gray-300">{entry.title}</span>
                       </div>
-                    );
-                  })}
-                </div>
+                      <p className="text-lg font-bold">₹{entry.amount.toLocaleString()}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </motion.div>
-        </div>
-
-        {/* 3D Model Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-8">
-          <h3 className="text-2xl font-semibold mb-4 font-poppins">{t('interactiveModel')}</h3>
-          <div className="chart-container">
-            <FloatingModel />
-          </div>
+          ) : (
+            <div className="text-center py-10 text-gray-500">
+              <p>No expense data for this month. Start tracking by adding expenses!</p>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
   );
-};
+}
+
+// A simple sub-component for the summary cards
+const SummaryCard = ({ title, amount }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-gray-800 p-6 rounded-xl shadow-lg"
+    >
+      <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+      <p className="text-3xl font-bold mt-1">₹{amount.toLocaleString()}</p>
+    </motion.div>
+);
+
