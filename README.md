@@ -1,146 +1,189 @@
-________________________________________
-Create a responsive website for an Income–Expense–Savings–Investments Platform with the following features:
-________________________________________
-UI/UX Reference:
-•	Follow the ET Money website style (modern, professional, minimalistic finance look).
-•	Clean, finance-friendly typography and dashboard-style design.
-•	Responsive across mobile, tablet, and desktop.
-•	Dark/Light mode with toggle.
-•	Kannada and English languages with toggle.
-________________________________________
-Pages & Features:
-1.	Homepage:
-o	Dashboard showing Income vs Expenses vs Savings with charts.
-o	Dummy images related to finance/money and human interactions.
-o	3D interactive model that moves/rotates on interaction.
-o	Background animations (particles, floating shapes, subtle gradients, money-themed).
-o	Page load animations (fade-in, slide-in, card animations).
-2.	Home Dashboard & Transactions Interaction (3D Cards):
-On the Home Dashboard, display all expense categories as 3D cards:
-Food, Travel, Bills, Shopping, Home Spent, Families Spent, Habits, Vehicles, Donate for Society, Other.
-o	Each 3D card shows a summary (total expense for that category).
-o	Cards should have interactive 3D effects (e.g., hover rotation, slight tilt, or depth movement) to make the dashboard dynamic.
-o	When a 3D card is clicked, navigate to a detailed page for that category, showing:
-	Graphs of expenses by day, month, and year.
-	Complete transaction details for that category.
-o	On each card detail page, also display one summary graph showing the expense trend according to the card type.
+# 💰 FinAI — Income • Expense • Savings • Investments Platform
 
-3.	Insights Page:
-o	Display Actual vs Potential Savings and Predictive Trends.
-4.	Investments Page:
-o	Normal chat interface (no AI now, can add later).
-o	Typing effect animation, interactive cursor/mouse animations.
-o	Local storage for chat history.
-5.	Register Page:
-o	Fields: Name, Contact Number, Password, Password Verification.
-o	Validation for empty fields and password match.
-6.	Login Page:
-o	Fields: Name, Password.
-o	Redirect to profile/dashboard upon successful login.
-7.	Profile Page:
-Fields (Essential for AI/ML):
-•	Name → For personalization.
-•	Profile Image (optional) → UI only.
-•	Gender (Male/Female/Other) → Helps detect demographic spending trends.
-•	Contact Number & Email → For notifications and linking transaction data.
-•	Bank Name → For transaction source tracking.
-•	State / Location → Region-specific spending and lifestyle patterns.
-•	Monthly Income / Income Range → Crucial for budgeting, predictive spending, and investment recommendations.
-•	Financial Goals → Short-term, medium-term, and long-term goals to guide investment suggestions.
-•	Risk Appetite / Tolerance → Low / Medium / High, to customize investment recommendations.
-Optional / Advanced Fields (Improves AI accuracy):
-•	Family Dependents → Helps tailor budgeting and savings suggestions.
-•	Existing Liabilities / EMIs → Improves predictive cash flow and financial health analysis.
-•	Investment Interests → Stocks, mutual funds, insurance, savings schemes, etc., to personalize advice.
-•	Lifestyle Habits / Spending Preferences → Can be derived from transactions but helpful for initial AI model setup.
-Purpose:
-•	These fields provide the minimum dataset needed for AI/ML models to:
-o	Predict future spending trends.
-o	Highlight optimization opportunities in saving.
-o	Recommend personalized investment options.
-o	Compare actual vs potential savings.
-Frontend & Backend Notes:
-•	Profile page should allow update and edit of all fields.
-•	Optional fields can be skipped but stored if provided.
-o	Ensure data is structured for easy ML feature extraction (numeric fields like income, categorical like risk appetite, etc.).
-8.	Footer Section:
-o	Social links: LinkedIn, Email, Facebook, Instagram, Twitter, and others.
-o	Clicking links navigates to other pages (internal links for website pages).
-9.	Developer Section (above footer):
-o	Display 4 team members in circular format with image placeholders and it taking likedin link I will update the link later:
-	Bhaskara
-	Khusahal L
-	Nithin G
-	Prasad A M
-________________________________________
-Styling & Components:
-•	Each page should have a separate CSS/Tailwind file.
-•	Reusable components for: buttons, cards, charts, forms, chatbot UI, and footer.
-•	Cards with soft shadows, rounded corners.
-•	Animations:
-o	Page load animations
-o	Background animations
-o	Chat typing and cursor animations
-________________________________________
-Tech Stack:
-•	Frontend: React.js + Tailwind CSS
-•	Charts: Chart.js or Recharts
-•	3D Model: Three.js or react-three-fiber
-•	Internationalization: i18next or react-intl for Kannada & English
-•	State Management: React state or Redux for chat history, theme, and profile data
-•	Local Storage: Store chat history and basic profile info
-________________________________________
-Call to Action:
-“Generate the complete React.js frontend code with:
-•	Routing between pages
-•	Page-specific styles
-•	Dark/Light mode
-•	Kannada/English language toggle
-•	3D interactive model on homepage
-•	Animated background and page transitions
-•	Transactions, insights, investments pages
-•	Register/Login/Profile pages with validation and relevant fields
-•	Footer with social links and internal page navigation
-•	Developer section with 4 circular team members (Bhaskara, Khusahal L, Nithin G, Prasad A M)
-•	Normal chat interface with typing/cursor animations and local chat history storage
-•	Dummy images for finance/money and human interactions (replaceable later).”
-________________________________________
+> **FinAI** is a modern, responsive finance management web platform inspired by **ET Money**, designed to help users track income, expenses, savings, and investments — with an elegant UI, bilingual support (Kannada + English), and interactive 3D visualizations.
 
-Home Dashboard & Transactions Interaction (3D Cards):
-•	On the Home Dashboard, display all expense categories as 3D cards:
-Food, Travel, Bills, Shopping, Home Spent, Families Spent, Habits, Vehicles, Donate for Society, Other.
-•	Each 3D card shows a summary (total expense for that category).
-•	Cards should have interactive 3D effects (e.g., hover rotation, slight tilt, or depth movement) to make the dashboard dynamic.
-•	When a 3D card is clicked, navigate to a detailed page for that category, showing:
-o	Graphs of expenses by day, month, and year.
-o	Complete transaction details for that category.
-•	On each card detail page, also display one summary graph showing the expense trend according to the card type.
+---
 
-Profile Page:
-Fields (Essential for AI/ML):
-•	Name → For personalization.
-•	Profile Image (optional) → UI only.
-•	Gender (Male/Female/Other) → Helps detect demographic spending trends.
-•	Contact Number & Email → For notifications and linking transaction data.
-•	Bank Name → For transaction source tracking.
-•	State / Location → Region-specific spending and lifestyle patterns.
-•	Monthly Income / Income Range → Crucial for budgeting, predictive spending, and investment recommendations.
-•	Financial Goals → Short-term, medium-term, and long-term goals to guide investment suggestions.
-•	Risk Appetite / Tolerance → Low / Medium / High, to customize investment recommendations.
-Optional / Advanced Fields (Improves AI accuracy):
-•	Family Dependents → Helps tailor budgeting and savings suggestions.
-•	Existing Liabilities / EMIs → Improves predictive cash flow and financial health analysis.
-•	Investment Interests → Stocks, mutual funds, insurance, savings schemes, etc., to personalize advice.
-•	Lifestyle Habits / Spending Preferences → Can be derived from transactions but helpful for initial AI model setup.
-Purpose:
-•	These fields provide the minimum dataset needed for AI/ML models to:
-o	Predict future spending trends.
-o	Highlight optimization opportunities in saving.
-o	Recommend personalized investment options.
-o	Compare actual vs potential savings.
-Frontend & Backend Notes:
-•	Profile page should allow update and edit of all fields.
-•	Optional fields can be skipped but stored if provided.
-•	Ensure data is structured for easy ML feature extraction (numeric fields like income, categorical like risk appetite, etc.).
+## 🚀 Features
 
+### 🏠 **Homepage**
 
+* Dashboard showing **Income vs Expenses vs Savings** with interactive charts.
+* Finance-themed **dummy images** and **animated backgrounds** (particles, gradients).
+* **3D interactive model** built with Three.js / react-three-fiber.
+* Smooth **page-load animations** (fade, slide, card transitions).
+* **Dark/Light mode toggle**.
+
+---
+
+### 📊 **Home Dashboard & Transactions**
+
+* All expense categories shown as **3D interactive cards**:
+
+  * Food, Travel, Bills, Shopping, Home Spent, Families Spent, Habits, Vehicles, Donate for Society, Other.
+* Hover and click animations (3D tilt, depth movement).
+* Click a card to open a **detailed category page**:
+
+  * Expense graphs by **day, month, and year**.
+  * **Full transaction history** for that category.
+  * Summary trend graph.
+
+---
+
+### 💡 **Insights Page**
+
+* Visualizes **Actual vs Potential Savings**.
+* Displays **Predictive Trends** (for future AI-based insights).
+
+---
+
+### 📈 **Investments Page**
+
+* **Chat-style interface** (simple now, AI-ready for future).
+* **Typing effect animation** and interactive cursor.
+* **LocalStorage** used for chat history.
+
+---
+
+### 👤 **Profile Page**
+
+* Collects essential data for future **AI/ML financial analysis**:
+
+  * Name, Gender, Contact, Email, Bank, State/Location.
+  * Monthly Income, Financial Goals, Risk Appetite.
+* Optional advanced fields:
+
+  * Family Dependents, Existing EMIs, Investment Interests, Lifestyle Habits.
+* Editable and updatable profile form.
+* Data structured for **AI model integration** (numeric + categorical features).
+
+---
+
+### 🔐 **Register & Login**
+
+* **Register Page**:
+
+  * Fields: Name, Contact Number, Password, Confirm Password.
+  * Validation for empty fields & password match.
+* **Login Page**:
+
+  * Fields: Name, Password.
+  * Redirects to Dashboard on success.
+
+---
+
+### 📞 **Footer & Developer Section**
+
+* Social links (LinkedIn, Email, Facebook, Instagram, Twitter).
+* Developer section with circular profile cards for:
+
+  * **Bhaskara**, **Khusahal L**, **Nithin G**, **Prasad A M**.
+* LinkedIn links placeholders (to be updated later).
+
+---
+
+## 🧠 Tech Stack
+
+| Layer                    | Tools                                  |
+| ------------------------ | -------------------------------------- |
+| **Frontend**             | React.js + Tailwind CSS                |
+| **Routing**              | React Router                           |
+| **Charts**               | Chart.js / Recharts                    |
+| **3D Models**            | Three.js / react-three-fiber           |
+| **State Management**     | React State / Redux                    |
+| **Internationalization** | i18next (Kannada + English)            |
+| **Local Storage**        | Chat history, theme, language, profile |
+| **Animations**           | CSS + Framer Motion (optional)         |
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone the Repository
+
+```bash
+[git clone https://github.com/Bhaskara05/finai_project.git
+cd finweav-insight
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Start the Development Server
+
+```bash
+npm run dev
+```
+
+### 4️⃣ Open in Browser
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🌙 Dark/Light Mode
+
+* Toggle button on the Navbar switches between **Dark** and **Light** themes.
+* Mode preference stored in **localStorage**.
+
+---
+
+## 🌐 Kannada & English Language Toggle
+
+* Language toggle powered by **i18next**.
+* Switch seamlessly between **Kannada (kn)** and **English (en)**.
+
+---
+
+## 🧩 Folder Structure
+
+```
+finweave-insight/
+│
+├── src/
+│   ├── components/        # Reusable UI components (Buttons, Cards, Charts, Footer, etc.)
+│   ├── pages/             # Home, Insights, Investments, Register, Login, Profile
+│   ├── assets/            # Dummy images, icons, 3D models
+│   ├── context/           # Theme and Language context
+│   ├── App.jsx            # Main app with routes and layout
+│   └── index.css          # Tailwind and base styles
+│
+├── public/
+│   └── index.html
+│
+├── tailwind.config.js
+├── package.json
+└── README.md
+```
+
+---
+
+## 🔮 Future Enhancements (Planned for FinAI v2.0)
+
+* AI-based financial insights and recommendations.
+* Predictive spending trend detection.
+* Personalized investment suggestions using ML models.
+* Integration with bank APIs for real transaction sync.
+* Data visualization using D3.js and TensorFlow.js insights.
+
+---
+
+## 👨‍💻 Developer Team
+
+| Name           | LinkedIn      |
+| -------------- | --------------|
+| **Bhaskara**   | https://www.linkedin.com/in/bhaskara-88aa76322/
+| **Khusahal L** |:https://www.linkedin.com/in/khushal-l
+| **Nithin G**   | https://www.linkedin.com/in/nithing17
+| **Prasad A M** | https://www.linkedin.com/in/prasadam
+
+---
+
+## 🧾 License
+
+This project is open-source under the **MIT License** — feel free to use, modify, and contribute.
