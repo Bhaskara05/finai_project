@@ -22,7 +22,7 @@ export function Footer() {
 
   const teamMembers = [
     { name: 'Bhaskara', role: 'Full Stack Developer', linkedin: 'https://www.linkedin.com/in/bhaskara-88aa76322/', image: bhaskaraImage },
-    { name: 'Khusahal L', role: 'Frontend Developer', linkedin: 'https://www.linkedin.com/in/khushal-l/', image: khushalImage },
+    { name: 'Khushal L', role: 'Frontend Developer', linkedin: 'https://www.linkedin.com/in/khushal-l/', image: khushalImage },
     { name: 'Nithin G', role: 'Backend Developer', linkedin: 'https://www.linkedin.com/in/nithing17/', image: nithinImage },
     { name: 'Prasad A M', role: 'UI/UX Designer', linkedin: 'https://www.linkedin.com/in/amprasad18/', image: prasadImage },
   ];
